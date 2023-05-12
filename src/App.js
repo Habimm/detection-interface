@@ -52,6 +52,9 @@ function App() {
 
   return (
     <div className="App">
+    <h3>
+      Upload an image to detect objects!
+    </h3>
       <header className="App-header">
         <input
           style={{border: '4px solid red'}}
