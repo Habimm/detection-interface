@@ -9,20 +9,13 @@ function App() {
     if (event.target.files.length === 0) {
       return;
     }
-    var file = event.target.files[0];
-    console.log(file);
 
-    handleImageUploadSelectedImage = URL.createObjectURL(event.target.files[0]);
+    var fileInformationJSONObject = event.target.files[0];
+    console.log(fileInformationJSONObject);
 
-    setSelectedImage(handleImageUploadSelectedImage);
-    setOutlinedImage(null);
-  };
+    var handleImageUploadSelectedImage = URL.createObjectURL(fileInformationJSONObject);
 
-  // This useEffect hook will run every time selectedImage changes.
-  useEffect(() => {
-    console.log(selectedImage);
-
-    fetch(selectedImage)
+    fetch(handleImageUploadSelectedImage)
     .then(response => response.blob())
     .then(blob => {
       var reader = new FileReader();
@@ -33,31 +26,26 @@ function App() {
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "image/jpeg");
 
-        console.log(selectedImage);
-        console.log(typeof selectedImage);
-        var file = base64data;
-
         var requestOptions = {
           method: 'POST',
           headers: myHeaders,
-          body: file,
+          body: base64data,
           redirect: 'follow'
         };
 
       fetch("http://35.91.42.35:8080/yolo", requestOptions)
         .then(response => response.blob())
         .then(blob => {
-          // Create an object URL for the blob
-          const blobUrl = URL.createObjectURL(blob);
-
-          // Use this URL to display the image
-          setOutlinedImage(blobUrl);
+          const detectionsBlobUrl = URL.createObjectURL(blob);
+          setOutlinedImage(detectionsBlobUrl);
         })
         .catch(error => console.log('error', error));
       }
       reader.readAsArrayBuffer(blob);
     });
-  }, [selectedImage]);
+
+    setSelectedImage(handleImageUploadSelectedImage);
+  };
 
   return (
     <div className="App">
