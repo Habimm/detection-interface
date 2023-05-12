@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
 import './App.css';
+import React, { useState, useEffect } from 'react';
 
 function App() {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -10,18 +10,21 @@ function App() {
       return;
     }
 
-    var fileInformationJSONObject = event.target.files[0];
-    console.log(fileInformationJSONObject);
+    var selectedFileObject = event.target.files[0];
 
-    var handleImageUploadSelectedImage = URL.createObjectURL(fileInformationJSONObject);
+    // We use a temporary variable, because
+    // React batches state updates for performance reasons,
+    // so we cannot call setSelectedImage() and expect
+    // selectedImage to hold the correct value in the next line.
+    var tempSelectedImage = URL.createObjectURL(selectedFileObject);
 
-    fetch(handleImageUploadSelectedImage)
+    fetch(tempSelectedImage)
     .then(response => response.blob())
     .then(blob => {
       var reader = new FileReader();
       reader.onloadend = function() {
-        var base64data = reader.result;
-        console.log(base64data);
+        // could be a: ArrayBuffer(497559)
+        var imageArrayBuffer = reader.result;
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "image/jpeg");
@@ -29,7 +32,7 @@ function App() {
         var requestOptions = {
           method: 'POST',
           headers: myHeaders,
-          body: base64data,
+          body: imageArrayBuffer,
           redirect: 'follow'
         };
 
@@ -44,7 +47,7 @@ function App() {
       reader.readAsArrayBuffer(blob);
     });
 
-    setSelectedImage(handleImageUploadSelectedImage);
+    setSelectedImage(tempSelectedImage);
   };
 
   return (
