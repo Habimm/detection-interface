@@ -19,33 +19,33 @@ function App() {
     var tempSelectedImage = URL.createObjectURL(selectedFileObject);
 
     fetch(tempSelectedImage)
-    .then(response => response.blob())
-    .then(blob => {
-      var reader = new FileReader();
-      reader.onloadend = function() {
-        // could be a: ArrayBuffer(497559)
-        var imageArrayBuffer = reader.result;
+      .then(response => response.blob())
+      .then(blob => {
+        var reader = new FileReader();
+        reader.onloadend = function() {
+          // could be a: ArrayBuffer(497559)
+          var imageArrayBuffer = reader.result;
 
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "image/jpeg");
+          var myHeaders = new Headers();
+          myHeaders.append("Content-Type", "image/jpeg");
 
-        var requestOptions = {
-          method: 'POST',
-          headers: myHeaders,
-          body: imageArrayBuffer,
-          redirect: 'follow'
-        };
+          var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: imageArrayBuffer,
+            redirect: 'follow',
+          };
 
-      fetch("http://35.91.42.35:8080/yolo", requestOptions)
-        .then(response => response.blob())
-        .then(blob => {
-          const detectionsBlobUrl = URL.createObjectURL(blob);
-          setOutlinedImage(detectionsBlobUrl);
-        })
-        .catch(error => console.log('error', error));
-      }
-      reader.readAsArrayBuffer(blob);
-    });
+        fetch("https://127.0.0.1:8080/yolo", requestOptions)
+          .then(response => response.blob())
+          .then(blob => {
+            const detectionsBlobUrl = URL.createObjectURL(blob);
+            setOutlinedImage(detectionsBlobUrl);
+          })
+          .catch(error => console.log('error', error));
+        }
+        reader.readAsArrayBuffer(blob);
+      });
 
     setSelectedImage(tempSelectedImage);
   };
