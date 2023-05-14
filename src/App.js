@@ -37,7 +37,7 @@ function App() {
             redirect: 'follow',
           };
 
-        fetch("https://localhost:8080/yolo", requestOptions)
+        fetch("https://18.237.216.140:8080/yolo", requestOptions)
           .then(response => response.blob())
           .then(blob => {
             const detectionsBlobUrl = URL.createObjectURL(blob);
