@@ -26,8 +26,9 @@ function App() {
           // could be a: ArrayBuffer(497559)
           var imageArrayBuffer = reader.result;
 
-          var myHeaders = new Headers();
-          myHeaders.append("Content-Type", "image/jpeg");
+          var myHeaders = {
+            "Content-Type": "image/jpeg"
+          };
 
           var requestOptions = {
             method: 'POST',
@@ -36,7 +37,7 @@ function App() {
             redirect: 'follow',
           };
 
-        fetch("https://127.0.0.1:8080/yolo", requestOptions)
+        fetch("https://localhost:8080/yolo", requestOptions)
           .then(response => response.blob())
           .then(blob => {
             const detectionsBlobUrl = URL.createObjectURL(blob);
